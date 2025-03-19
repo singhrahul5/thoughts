@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: thoughts
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  properties:
+    hibernate:
+      format_sql: true
+  datasource:
+    uri: "${MYSQL_URI}/${MYSQL_DATABASE_NAME}"
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+
+logging:
+  level:
+    me.rahul.thoughts: DEBUG   # Specific logging level for the 'dev.some.flare' package
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+app:
+  security:
+    secret-key: ${SECRET_KEY}
+  sendgrid:
+    api-key: ${SENDGRID_MAIL_API_KEY}
+    from-email: imrahulkumar590@gmail.com
+    from-name: Rahul

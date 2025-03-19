@@ -23,22 +23,36 @@ repositories {
 	mavenCentral()
 }
 
+val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-mail")
+	implementation("com.sendgrid:sendgrid-java")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	runtimeOnly("com.mysql:mysql-connector-j")
+	runtimeOnly("me.paulschwarz:spring-dotenv:4.0.0")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testRuntimeOnly("com.h2database:h2")
+
+	val mockito = "org.mockito:mockito-core"
+	testImplementation(mockito)
+	mockitoAgent(mockito) { isTransitive = false }
 }
 
 tasks.withType<Test> {
+	jvmArgs("-javaagent:${mockitoAgent.asPath}")
 	useJUnitPlatform()
+}
+
+tasks.withType<JavaCompile>().configureEach {
+//	options.compilerArgs.add("-parameters")
+//	println(options.compilerArgs)
 }
