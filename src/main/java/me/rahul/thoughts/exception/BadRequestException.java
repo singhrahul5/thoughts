@@ -5,11 +5,11 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.lang.NonNull;
 
-public class NotAvailableException extends CustomException  {
+public class BadRequestException extends CustomException {
 
-    private final HttpStatusCode statusCode = HttpStatus.CONFLICT;
+    private final HttpStatusCode statusCode = HttpStatus.BAD_REQUEST;
 
-    public NotAvailableException(String message) {
+    public BadRequestException(String message) {
         super(message);
     }
 
