@@ -88,11 +88,9 @@ public class SecurityConfig {
                 .withSecretKey(securityConfigProperties.getSecretKey())
                 .macAlgorithm(MacAlgorithm.HS256).build();
 
-
-        // don't allow Refresh token
-        jwtDecoder.setJwtValidator(jwt -> {
+        OAuth2TokenValidator<Jwt> validator = jwt -> {
             String tokenType = jwt.getClaimAsString("typ");
-
+            log.info("hiii");
             if (tokenType == null || !tokenType.equals("Bearer")) {
                 OAuth2Error error = new OAuth2Error(OAuth2ErrorCodes.UNSUPPORTED_TOKEN_TYPE,
                         "The " + jwt + " is not of typ Bearer", null);
@@ -101,7 +99,9 @@ public class SecurityConfig {
             }
 
             return OAuth2TokenValidatorResult.success();
-        });
+        };
+
+        jwtDecoder.setJwtValidator(JwtValidators.createDefaultWithValidators(List.of(validator)));
 
         return jwtDecoder;
     }
@@ -138,9 +138,6 @@ public class SecurityConfig {
                 .macAlgorithm(MacAlgorithm.HS256)
                 .build();
 
-        // add expiration validation
-        OAuth2TokenValidator<Jwt> withExpiry = new JwtTimestampValidator(); // Validates 'exp'
-
         OAuth2TokenValidator<Jwt> withType = jwt -> {
             String tokenType = jwt.getClaimAsString("typ");
             if (tokenType == null || !tokenType.equals("Refresh")) {
@@ -149,12 +146,9 @@ public class SecurityConfig {
                 log.debug("The {} is not of typ Refresh", jwt);
                 return OAuth2TokenValidatorResult.failure(error);
             }
-
             return OAuth2TokenValidatorResult.success();
         };
-
-        OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(List.of(withExpiry, withType));
-        decoder.setJwtValidator(validator);
+        decoder.setJwtValidator(JwtValidators.createDefaultWithValidators(List.of(withType)));
         return new JwtAuthenticationProvider(decoder);
     }
 }

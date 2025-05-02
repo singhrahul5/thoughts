@@ -2,6 +2,11 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.4.1"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("application")
+}
+
+application {
+	mainClass = "me.rahul.thoughts.ThoughtsApplication"
 }
 
 group = "me.rahul"
