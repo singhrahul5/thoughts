@@ -1,7 +1,9 @@
 package me.rahul.thoughts.blog;
 
+import jakarta.transaction.Transactional;
 import me.rahul.thoughts.blog.dto.BlogResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -64,4 +66,40 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
             ORDER BY b.createdAt DESC
             """)
     List<BlogResponse> findFromFollowedUser(String username);
+
+    @Transactional
+    @Modifying
+    @Query("""
+            UPDATE Blog b
+            SET b.commentCount = b.commentCount + 1
+            WHERE b.id = :id
+            """)
+    void incrementCommentCount(Long id);
+
+    @Transactional
+    @Modifying
+    @Query("""
+            UPDATE Blog b
+            SET b.commentCount = b.commentCount - 1
+            WHERE b.id = :id
+            """)
+    void decrementCommentCount(Long id);
+
+    @Transactional
+    @Modifying
+    @Query("""
+            UPDATE Blog b
+            SET b.likeCount = b.likeCount + 1
+            WHERE b.id = :id
+            """)
+    void incrementLikeCount(Long id);
+
+    @Transactional
+    @Modifying
+    @Query("""
+            UPDATE Blog b
+            SET b.likeCount = b.likeCount - 1
+            WHERE b.id = :id
+            """)
+    void decrementLikeCount(Long id);
 }

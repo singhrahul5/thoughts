@@ -34,6 +34,20 @@ public class BlogController {
         return blogService.getBlog(id);
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/{id}/like")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void likeBlog(@PathVariable Long id, Authentication auth) {
+        blogService.likeBlog(id, auth.getName());
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @DeleteMapping("/{id}/unlike")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void dislikeBlog(@PathVariable Long id, Authentication auth) {
+        blogService.dislikeBlog(id, auth.getName());
+    }
+
     @GetMapping("/trending")
     public List<BlogResponse> getPopularBlogs(Authentication auth) {
         return blogService.getPopularBlogs();

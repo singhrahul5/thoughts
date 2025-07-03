@@ -37,11 +37,16 @@ public class Blog {
     @Enumerated(value = EnumType.STRING)
     private BlogType type;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="parent_id")
+    private Blog parent;
+
     @Builder
-    public Blog(User author, String content, BlogType type) {
+    public Blog(User author, String content, BlogType type, Blog parent) {
         this.author = author;
         this.content = content;
         this.type = type;
+        this.parent = parent;
     }
 
     @PrePersist
