@@ -9,12 +9,13 @@ spring:
     hibernate:
       format_sql: true
   datasource:
-    uri: "${MYSQL_URI}/${MYSQL_DATABASE_NAME}"
+    url: "${MYSQL_URI}/${MYSQL_DATABASE_NAME}"
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
 
 logging:
   level:
+#    root: debug
     me.rahul.thoughts: DEBUG   # Specific logging level for the 'dev.some.flare' package
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG

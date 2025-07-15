@@ -14,7 +14,7 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app.sendgrid")
 class SendGridConfigurationProperties {
     @NotBlank
-    @Pattern(regexp = "^SG[0-9a-zA-Z._]{67}$")
+    @Pattern(regexp = "^SG[0-9a-zA-Z._-]{67}$")
     private String apiKey;
 
     @Email
